@@ -10,3 +10,31 @@ logs/
 data/*.csv
 reports/daily_reports/
 reports/plots/
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+venv/
+env/
+
+# Streamlit cache
+.streamlit/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model files
+model/*.pkl
+
+# Data
+data/*.sqlite
+data/*.csv
+data/*.xlsx
+data/*.pkl
+
+# VSCode Local History (your main problem)
+.history/
+
+# temp
+*.tmp
