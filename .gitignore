@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+venv/
+env/
+.env
+.ipynb_checkpoints/
+logs/
+*.log
+*.sqlite
+data/*.csv
+reports/daily_reports/
+reports/plots/

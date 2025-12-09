@@ -1,0 +1,383 @@
+⭐ CNCMate – DETAILED DEVELOPMENT PLAN
+(Beginner-friendly, DS-focused, professor-approved)
+PHASE 0 — Project Setup (2–3 Days)
+Goals
+
+Set up environment
+
+Create project structure
+
+Install required tools
+
+Tasks
+
+✔ Install Python, VS Code
+✔ Create virtual environment
+✔ Install libraries:
+
+pip install pandas numpy scikit-learn matplotlib seaborn fastapi uvicorn streamlit
+
+
+✔ Create folder structure:
+
+CNCMate/
+│── data/
+│── notebooks/
+│── src/
+│   ├── data_simulation.py
+│   ├── etl_pipeline.py
+│   ├── model_training.py
+│   ├── model_inference.py
+│   ├── fastapi_app.py
+│── dashboard/
+│   ├── app.py
+│── reports/
+│── docs/
+
+
+✔ Set up GitHub repository (optional)
+
+⭐ PHASE 1 — Data Simulation & Collection (Week 1)
+
+(Because professor suggested not to do complex IoT integration)
+
+Goals
+
+Generate CNC machine data realistically enough to train ML models.
+
+Data Variables to Simulate
+Feature	Description
+temperature	°C
+vibration	mm/s
+speed	RPM
+energy	Watts
+status	ON/OFF/IDLE
+tool_usage	mins of tool use
+Logic to Simulate Failures
+
+Temperature rises before failure
+
+Vibration spikes before tool wear
+
+Speed becomes unstable
+
+Tasks
+
+✔ Write data_simulation.py
+✔ Generate 5–30 days of data (every 1 second or every 10 seconds)
+✔ Save to CSV & SQLite database
+
+Deliverables
+
+c cnc_data_raw.csv
+
+cnc_raw.sqlite
+
+⭐ PHASE 2 — Data Engineering (Week 2)
+Goals
+
+Clean the data + create ML-friendly features.
+
+Tasks
+1. Data Cleaning
+
+Remove missing values
+
+Correct timestamps
+
+Remove unrealistic spikes
+
+2. Feature Engineering
+
+Create new columns:
+
+Feature	Purpose
+temp_roll_mean_30s	smooth temp trend
+vib_roll_mean_30s	detect growing vibration
+temp_diff	sudden temperature jump
+speed_pct_change	motor instability
+tool_wear_ind	tool life reduction indicator
+failure_label	1 = failure
+3. Create Feature Store Table
+
+Save processed dataset:
+
+cnc_features.csv
+
+Deliverables
+
+ETL notebook: 01_ETL.ipynb
+
+Processed dataset: cnc_features.csv
+
+⭐ PHASE 3 — Exploratory Data Analysis (Week 3–4)
+Goals
+
+Understand patterns before failure.
+
+Tasks
+
+✔ Plot temperature trends
+✔ Plot vibration trends
+✔ Compare normal vs failure conditions
+✔ Correlation heatmap
+✔ Rolling averages visualization
+✔ Tool usage patterns
+
+Insights to Extract
+
+Vibration rising pattern → early tool wear
+
+Temperature instability → lubrication failure
+
+Speed fluctuations → spindle issues
+
+Failures happen usually after X hours of tool usage
+
+Deliverables
+
+Notebook: 02_EDA.ipynb
+
+Graphs for report:
+
+Time-series plots
+
+Heatmaps
+
+Boxplots
+
+Comparison graphs
+
+⭐ PHASE 4 — Machine Learning Model Development (Week 4–5)
+Goals
+
+Build 2–3 models for predictive maintenance and anomaly detection.
+
+Model 1 — Classification (Main ML Model)
+
+Predict failure in next 10–30 minutes.
+
+Algorithms to Train
+
+Logistic Regression
+
+Random Forest
+
+XGBoost (optional)
+
+Tasks
+
+✔ Split data into train/test
+✔ Train each model
+✔ Evaluate using:
+
+Accuracy
+
+Precision
+
+Recall
+
+F1-score
+
+ROC curve
+
+Expected Result
+
+Random Forest usually performs best.
+
+Model 2 — Anomaly Detection (Unsupervised)
+
+Detect abnormal vibration/temperature.
+
+Algorithm
+
+Isolation Forest
+
+Tasks
+
+✔ Train model
+✔ Detect anomalies
+✔ Compare with known failures
+
+Model 3 — Tool Life Estimation (Optional but useful)
+
+Predict remaining life of tool.
+
+Algorithms
+
+Linear Regression
+
+Prophet (optional)
+
+Final Deliverables
+
+Notebook: 03_ML_Models.ipynb
+
+final_model.pkl
+
+⭐ PHASE 5 — Model Deployment (Week 6)
+Goal
+
+Serve the ML model using an API.
+
+Tasks
+
+✔ Create FastAPI app
+✔ Add /predict endpoint
+✔ Load model inside API
+✔ Test with Postman or browser
+
+Sample Output
+{
+ "failure_probability": 0.82,
+ "status": "FAILURE_SOON",
+ "recommended_action": "Check tool vibration"
+}
+
+Deliverables
+
+fastapi_app.py
+
+Running API locally
+
+⭐ PHASE 6 — Dashboard Development (Week 7–8)
+Goal
+
+Show analytics in a simple dashboard using Streamlit.
+
+Dashboard Pages
+Page 1 – Machine Overview
+
+Current temperature
+
+Current vibration
+
+Speed
+
+Tool usage
+
+Failure probability
+
+Page 2 – Trends & Analytics
+
+Graphs:
+
+Temperature trend
+
+Vibration trend
+
+Tool wear curve
+
+Failure patterns
+
+Page 3 – Operator/Shift Analytics
+
+(Optional but good for marks)
+
+Page 4 – Reports Section
+
+Export daily summary to PDF
+
+Export weekly trends
+
+Deliverables
+
+dashboard/app.py
+
+Screenshots for blackbook
+
+⭐ PHASE 7 — Alerts System (Optional Feature)
+
+If vibration > threshold:
+→ show alert on dashboard
+
+If failure probability > 0.7:
+→ alert: “Machine may fail soon”
+
+Simple pop-up alerts or notification banners.
+
+⭐ PHASE 8 — Documentation & Report Writing (Week 9–10)
+
+Prepare:
+
+✔ Project Report (Blackbook)
+✔ System Architecture Diagram
+✔ Flowcharts
+✔ ER Diagram
+✔ ML Workflow Diagram
+✔ Screenshots
+✔ Summary of results & model accuracy
+
+⭐ PHASE 9 — Presentation & Viva Preparation (Week 11–12)
+Prepare:
+
+✔ PPT (12–20 slides)
+✔ Code explanation
+✔ 2–3 demos:
+
+EDA visualization
+
+Model prediction
+
+Dashboard running
+
+✔ Answer DS viva questions:
+
+Why Random Forest?
+
+Why rolling average?
+
+What is anomaly detection?
+
+What is overfitting?
+
+⭐ FINAL DELIVERABLES CHECKLIST
+✔ Technical
+
+Data simulation script
+
+ETL pipeline
+
+EDA notebook
+
+ML models
+
+Model comparison table
+
+FastAPI deployment
+
+Streamlit dashboard
+
+✔ Documentation
+
+Project report
+
+PPT
+
+Architecture diagrams
+
+Screenshots
+
+✔ Code Folder Structure (Clean & professional)
+CNCMate/
+│── data/
+│── src/
+│── notebooks/
+│── dashboard/
+│── model/
+│── reports/
+│── docs/
+
+🎯 WHY THIS PLAN IS PERFECT FOR YOU
+
+100% aligned to your professor’s feedback
+
+Beginner-friendly implementation
+
+Full DS lifecycle (E2E)
+
+Realistic manufacturing use-case
+
+Easy to finish in timelines
+
+Impressive for interview portfolio
