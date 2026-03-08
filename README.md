@@ -1,201 +1,364 @@
-# CNCMate: AI-Powered CNC Predictive Maintenance System
+# ⚙️ CNCMate: AI-Powered CNC Predictive Maintenance System
 
-![CNCMate Banner](docs/architecture_diagram.png)
+![CNCMate Architecture](docs/architecture_diagram.png)
 
-**CNCMate** is an end-to-end industrial IoT application designed to predict CNC machine failures before they happen. It combines simulated sensor data, machine learning pipelines, a robust API, and an interactive dashboard to provide real-time analytics and actionable alerts for maintenance teams.
+**CNCMate** is an end-to-end industrial IoT platform designed to **predict CNC machine failures before they happen**.
 
-## 🚀 Key Features
+The system simulates real-time sensor data, processes it through a data pipeline, applies machine learning models for predictive maintenance, and visualizes insights through an interactive monitoring dashboard.
 
-* **Real-time Monitoring**: Live tracking of Temperature, Vibration, Speed, and Energy consumption.
-* **Predictive Maintenance**: Machine Learning model (Random Forest) predicting failure probability in the next 10 minutes.
-* **Anomaly Detection**: Early detection of abnormal behaviors using Isolation Forest.
-* **Alert System**: Instant UI banners and optional Telegram notifications for critical thresholds.
-* **AI Reporting**: Automated daily PDF reports with executive summaries, trend charts, and root-cause hints.
-* **Interactive Dashboard**: User-friendly interface built with Streamlit.
+This project demonstrates a **complete ML engineering pipeline** combining **data engineering, machine learning, API deployment, and real-time monitoring dashboards**.
 
-## 🛠️ Technology Stack
+---
 
-* **Language**: Python 3.11+
-* **Data Processing**: Pandas, NumPy
-* **Machine Learning**: Scikit-Learn (Random Forest, Isolation Forest)
-* **Backend API**: FastAPI, Uvicorn
-* **Frontend Dashboard**: Streamlit, Matplotlib, Seaborn
-* **Reporting**: FPDF, Jinja2
+# 🚀 Key Features
 
-## 📂 Project Structure
+### 🔹 Real-Time Machine Monitoring
+Live visualization of:
 
-```
+- Temperature
+- Vibration
+- Spindle Speed
+- Energy Consumption
+- Tool Wear
+
+---
+
+### 🔹 Predictive Maintenance
+Machine learning models analyze sensor patterns to estimate **failure probability within the next 10 minutes**.
+
+Model pipeline includes:
+
+- Feature Engineering
+- Logistic Regression Pipeline
+- Random Forest comparison
+- Isolation Forest anomaly detection
+
+---
+
+### 🔹 Anomaly Detection
+Isolation Forest identifies abnormal machine behavior before failure occurs.
+
+---
+
+### 🔹 Alert System
+Automatic alerts triggered when:
+
+- Failure probability exceeds threshold
+- Sensor readings exceed safety limits
+
+Alerts can appear as:
+
+- Dashboard warning banners
+- Logged alert history
+- Optional Telegram notifications
+
+---
+
+### 🔹 AI Maintenance Reports
+Daily automated PDF reports including:
+
+- Machine statistics
+- Failure trends
+- Sensor analysis
+- AI-generated maintenance recommendations
+
+---
+
+### 🔹 Interactive Dashboard
+Industrial monitoring dashboard built with **Streamlit** providing:
+
+- Real-time machine health
+- KPI monitoring
+- Sensor trends
+- Failure prediction
+- Alert center
+- Shift analytics
+- Report generation
+
+---
+
+# 🧠 System Architecture
+
+
+Sensor Simulator
+
+↓
+
+Raw Machine Data
+
+↓
+
+ETL Pipeline
+
+↓
+
+Feature Engineering
+
+↓
+
+Machine Learning Model
+
+↓
+
+FastAPI Prediction API
+
+↓
+
+Streamlit Monitoring Dashboard
+
+↓
+
+AI Maintenance Reports
+
+
+This architecture mirrors **real industrial predictive maintenance systems**.
+
+---
+
+# 🛠 Technology Stack
+
+### Programming
+Python 3.11+
+
+### Data Processing
+- Pandas
+- NumPy
+
+### Machine Learning
+- Scikit-Learn
+- Logistic Regression
+- Random Forest
+- Isolation Forest
+
+### Backend API
+- FastAPI
+- Uvicorn
+
+### Dashboard
+- Streamlit
+- Plotly
+- Matplotlib
+- Seaborn
+
+### Reporting
+- FPDF
+- Jinja2
+
+---
+
+# 📂 Project Structure
+
+
 CNCMate/
-│── dashboard/
-│   └── app.py              # Streamlit Dashboard application
-│── data/
-│   ├── cnc_features.csv    # Processed dataset
-│   └── alerts_log.csv      # Log of generated alerts
-│── docs/                   # Documentation and diagrams
-│── model/
-│   └── final_model.pkl     # Trained ML Pipeline
-│── notebooks/
-│   └── 03_ml_models.py     # Training and EDA scripts
-│── reports/                # Generated PDF reports
-│── src/
-│   ├── reports/            # Report generation module
-│   ├── data_simulation.py  # Data simulator
-│   ├── etl_pipeline.py     # ETL processing script
-│   └── utils.py            # Utility functions
-│── fastapi_app.py          # FastAPI Backend entry point
-│── requirements.txt        # Project dependencies
-└── README.md               # Project documentation
-```
 
-## ⚡ Installation & Setup
+│
 
-1. **Clone the Repository**
+├── dashboard/
 
-    ```bash
-    git clone https://github.com/A289shek2004/CNCMate.git
-    cd CNCMate
-    ```
+│ └── app.py # Streamlit dashboard
 
-2. **Install Dependencies**
-    It is recommended to use a virtual environment.
+│
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+├── data/
 
-## 🏃‍♂️ How to Run
+│ ├── raw_sensor_data.csv
 
-To run the full system, you need to start both the Backend API and the Dashboard. Open two terminal windows:
+│ ├── cnc_features.csv
 
-### 1. Start the API Server
+│ └── alerts_log.csv
 
-The FastAPI backend serves predictions and generates reports.
+│
+
+├── docs/
+
+│ └── architecture_diagram.png
+
+│
+
+├── model/
+
+│ └── final_model.pkl
+
+│
+
+├── notebooks/
+
+│ ├── 01_etl_pipeline.py
+
+│ ├── 02_eda.py
+
+│ └── 03_ml_models.py
+
+│
+
+├── reports/
+
+│ └── daily_reports/
+
+│
+
+├── scripts/
+
+│ ├── simulator.py
+
+│ └── etl_runner.py
+
+│
+
+├── src/
+
+│ ├── reports/
+
+│ ├── data_simulation.py
+
+│ ├── etl_pipeline.py
+
+│ └── utils.py
+
+│
+
+├── fastapi_app.py
+
+├── requirements.txt
+
+└── README.md
+
+
+
+---
+
+# ⚡ Installation
+
+Clone the repository:
 
 ```bash
+git clone https://github.com/A289shek2004/CNCMate.git
+cd CNCMate
+
+Install dependencies:
+
+pip install -r requirements.txt
+▶️ Running the Full System
+
+Open 4 terminals.
+
+1️⃣ Start Sensor Simulator
+
+Simulates CNC machine sensor data.
+
+python scripts/simulator.py
+2️⃣ Start ETL Pipeline
+
+Processes raw sensor data and generates features.
+
+python scripts/etl_runner.py
+3️⃣ Start FastAPI Backend
+
+Serves prediction API and report generation.
+
 uvicorn fastapi_app:app --host 127.0.0.1 --port 8000 --reload
-```
 
-*API Docs available at: <http://127.0.0.1:8000/docs>*
+API documentation:
 
-### 2. Start the Dashboard
-
-The Streamlit app allows you to visualize data and interact with the system.
-
-```bash
+http://127.0.0.1:8000/docs
+4️⃣ Start Monitoring Dashboard
 streamlit run dashboard/app.py
-```
 
-*Dashboard will open at: <http://localhost:8501>*
+Dashboard:
 
-## 📊 Documentation
+http://localhost:8501
+📊 Dashboard Capabilities
 
-Full project documentation, including the **Blackbook Report**, **Architecture Diagrams**, and **User Manual**, can be found in the `docs/` directory.
+The dashboard provides:
 
-## ✉️ Contact
+Operational KPIs
 
-**Author**: Abhishek
-**GitHub**: [A289shek2004](https://github.com/A289shek2004)
+Machine health monitoring
 
-**Email**: <abhishekgup2004@gmail.com>
+Failure probability visualization
 
-**LinkedIn**: [Abhishek](https://www.linkedin.com/in/1289shek2004/)
+Sensor trend analysis
 
-# CNCMate: AI-Powered CNC Predictive Maintenance System
+Alert center
 
-![CNCMate Banner](docs/architecture_diagram.png)
+Shift analytics
 
-**CNCMate** is an end-to-end industrial IoT application designed to predict CNC machine failures before they happen. It combines simulated sensor data, machine learning pipelines, a robust API, and an interactive dashboard to provide real-time analytics and actionable alerts for maintenance teams.
+AI report generation
 
-## 🚀 Key Features
+📈 Machine Learning Model
 
-* **Real-time Monitoring**: Live tracking of Temperature, Vibration, Speed, and Energy consumption.
-* **Predictive Maintenance**: Machine Learning model (Random Forest) predicting failure probability in the next 10 minutes.
-* **Anomaly Detection**: Early detection of abnormal behaviors using Isolation Forest.
-* **Alert System**: Instant UI banners and optional Telegram notifications for critical thresholds.
-* **AI Reporting**: Automated daily PDF reports with executive summaries, trend charts, and root-cause hints.
-* **Interactive Dashboard**: User-friendly interface built with Streamlit.
+Features used:
 
-## 🛠️ Technology Stack
+temperature
+vibration
+speed
+energy
+temp_roll_mean
+vib_roll_mean
+temp_change
+vib_change
+machine_stress
+status_encoded
 
-* **Language**: Python 3.11+
-* **Data Processing**: Pandas, NumPy
-* **Machine Learning**: Scikit-Learn (Random Forest, Isolation Forest)
-* **Backend API**: FastAPI, Uvicorn
-* **Frontend Dashboard**: Streamlit, Matplotlib, Seaborn
-* **Reporting**: FPDF, Jinja2
+Target:
 
-## 📂 Project Structure
+Failure within next 10 minutes
 
-```
-CNCMate/
-│── dashboard/
-│   └── app.py              # Streamlit Dashboard application
-│── data/
-│   ├── cnc_features.csv    # Processed dataset
-│   └── alerts_log.csv      # Log of generated alerts
-│── docs/                   # Documentation and diagrams
-│── model/
-│   └── final_model.pkl     # Trained ML Pipeline
-│── notebooks/
-│   └── 03_ml_models.py     # Training and EDA scripts
-│── reports/                # Generated PDF reports
-│── src/
-│   ├── reports/            # Report generation module
-│   ├── data_simulation.py  # Data simulator
-│   ├── etl_pipeline.py     # ETL processing script
-│   └── utils.py            # Utility functions
-│── fastapi_app.py          # FastAPI Backend entry point
-│── requirements.txt        # Project dependencies
-└── README.md               # Project documentation
-```
+Model evaluation includes:
 
-## ⚡ Installation & Setup
+Accuracy
 
-1. **Clone the Repository**
+Precision
 
-    ```bash
-    git clone https://github.com/A289shek2004/CNCMate.git
-    cd CNCMate
-    ```
+Recall
 
-2. **Install Dependencies**
-   
-    It is recommended to use a virtual environment.
+ROC-AUC
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+Confusion Matrix
 
-## 🏃‍♂️ How to Run
+📚 Documentation
 
-To run the full system, you need to start both the Backend API and the Dashboard. Open two terminal windows:
+Full documentation available in:
 
-### 1. Start the API Server
+docs/
 
-The FastAPI backend serves predictions and generates reports.
+Includes:
 
-```bash
-uvicorn fastapi_app:app --host 127.0.0.1 --port 8000 --reload
-```
+Blackbook report
 
-*API Docs available at: <http://127.0.0.1:8000/docs>*
+Architecture diagrams
 
-### 2. Start the Dashboard
+Project explanation
 
-The Streamlit app allows you to visualize data and interact with the system.
+👨‍💻 Author
 
-```bash
-streamlit run dashboard/app.py
-```
+Abhishek Gupta
 
-*Dashboard will open at: <http://localhost:8501>*
+GitHub
+https://github.com/A289shek2004
 
-## 📊 Documentation
+LinkedIn
+https://www.linkedin.com/in/1289shek2004/
 
-Full project documentation, including the **Blackbook Report**, **Architecture Diagrams**, and **User Manual**, can be found in the `docs/` directory.
+Email
+abhishekgup2004@gmail.com
 
-## ✉️ Contact
 
-**Author**: Abhishek Gupta
+---
 
-**GitHub**: [A289shek2004](https://github.com/A289shek2004)
+# ⭐ Improvements I Recommend
+
+Add a **screenshots section**:
+
+
+docs/screenshots/dashboard.png
+docs/screenshots/prediction.png
+docs/screenshots/report.png
+
+
+Then add in README:
+
+```markdown
+# Dashboard Preview
+
+![Dashboard](docs/screenshots/dashboard.png)
