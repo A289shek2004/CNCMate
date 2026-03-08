@@ -14,7 +14,7 @@ import os
 
 st.set_page_config(layout="wide", page_title="CNCMate Industrial Dashboard")
 
-st.experimental_rerun()
+# st.experimental_rerun()
 
 
 st_autorefresh(interval=5000)
