@@ -1,0 +1,83 @@
+/* ===============================
+CNCMate Dashboard Styling
+=============================== */
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* App background */
+.stApp {
+    background-color: #0E1117;
+}
+
+/* Metric cards */
+.metric-card {
+    background: #1c1f26;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #2d323d;
+}
+
+/* Titles */
+.title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #00AEEF;
+}
+
+/* Sidebar styling */
+section[data-testid="stSidebar"] {
+    background-color: #15181E;
+}
+
+/* Tables */
+.dataframe {
+    border-radius: 10px;
+}
+
+/* Alert colors */
+
+.alert-red {
+    background-color: #ff4b4b;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+}
+
+.alert-orange {
+    background-color: #ff9f43;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+}
+
+.alert-green {
+    background-color: #2ecc71;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+}
+
+/* Button styling */
+
+button[kind="primary"] {
+    border-radius: 10px;
+    background-color: #00AEEF;
+}
+
+/* Chart container */
+
+.chart-container {
+    background: #1c1f26;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Footer */
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.6;
+}

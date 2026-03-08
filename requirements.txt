@@ -3,6 +3,7 @@ uvicorn[standard]
 joblib
 numpy>=1.26.0
 pandas
+scipy
 scikit-learn
 xgboost
 python-multipart
@@ -13,3 +14,4 @@ seaborn
 fpdf
 openpyxl
 jinja2
+paho-mqtt==2.1.0

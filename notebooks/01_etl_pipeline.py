@@ -1,109 +1,86 @@
 import pandas as pd
 import numpy as np
 
-# ------------------------------------
-# LOAD RAW DATA
-# ------------------------------------
-df = pd.read_csv("data/cnc_data_raw.csv")
-
-# Convert timestamp
-df["timestamp"] = pd.to_datetime(df["timestamp"])
-
-# Sort by timestamp
-df = df.sort_values("timestamp").reset_index(drop=True)
+RAW_DATA = "data/cnc_data_raw.csv"
+OUTPUT_DATA = "data/cnc_features.csv"
 
 
-# ------------------------------------
-# CLEANING
-# ------------------------------------
+def run_etl():
 
-# 1. Remove missing values
-df = df.dropna()
+    print("🚀 Starting ETL Pipeline")
 
-# 2. Clip unrealistic values
-df["temperature"] = df["temperature"].clip(20, 90)
-df["vibration"] = df["vibration"].clip(0.3, 7)
-df["speed"] = df["speed"].clip(0, 6000)
-df["energy"] = df["energy"].clip(0, 200)
+    # ---------------------------
+    # 1. EXTRACT
+    # ---------------------------
 
-# 3. Smooth extreme spikes
-df["temperature_smooth"] = df["temperature"].rolling(window=3, min_periods=1).mean()
-df["vibration_smooth"]  = df["vibration"].rolling(window=3, min_periods=1).mean()
+    try:
+        df = pd.read_csv(RAW_DATA, parse_dates=["timestamp"])
+        print(f"Loaded {len(df)} rows")
 
+    except FileNotFoundError:
+        print("Raw dataset not found")
+        return None
 
-# ------------------------------------
-# FEATURE ENGINEERING
-# ------------------------------------
+    # ---------------------------
+    # 2. CLEAN
+    # ---------------------------
 
-# 1. Rolling averages (30-second window)
-ROLLING_WINDOW = 3  # since interval = 10 sec → 3 rows = 30 sec
+    df = df.sort_values("timestamp")
 
-df["temp_roll_mean_30s"] = df["temperature_smooth"].rolling(ROLLING_WINDOW).mean()
-df["vib_roll_mean_30s"]  = df["vibration_smooth"].rolling(ROLLING_WINDOW).mean()
+    # Handle missing values
+    df = df.ffill().fillna(0)
 
+    # ---------------------------
+    # 3. FEATURE ENGINEERING
+    # ---------------------------
 
-# 2. Temperature difference
-df["temp_diff"] = df["temperature_smooth"].diff().fillna(0)
+    print("Creating rolling features")
 
+    df["temp_roll_mean"] = df["temperature"].rolling(30, min_periods=1).mean()
+    df["vib_roll_mean"] = df["vibration"].rolling(30, min_periods=1).mean()
 
-# 3. Speed % change
-df["speed_pct_change"] = df["speed"].pct_change().fillna(0) * 100
-df["speed_pct_change"] = df["speed_pct_change"].replace([np.inf, -np.inf], 0)
-df["speed_pct_change"] = df["speed_pct_change"].fillna(0)
-df["speed_pct_change"] = df["speed_pct_change"].clip(-300, 300)
+    # Rate of change features
+    df["temp_change"] = df["temperature"].diff().fillna(0)
+    df["vib_change"] = df["vibration"].diff().fillna(0)
 
+    # Machine stress index
+    df["machine_stress"] = (
+        0.4 * df["temperature"] +
+        0.4 * df["vibration"] +
+        0.2 * df["speed"]
+    )
 
-# 4. Tool wear indicator (normalized)
-max_tool_usage = df["tool_usage"].max()
-df["tool_wear_ind"] = df["tool_usage"] / max_tool_usage
+    # Status encoding
+    df["status_encoded"] = df["status"].map({
+        "ON": 2,
+        "IDLE": 1,
+        "OFF": 0
+    })
 
+    # ---------------------------
+    # 4. FAILURE LABEL (SIMULATED)
+    # ---------------------------
 
-# ------------------------------------
-# FAILURE LABEL CREATION
-# ------------------------------------
-df["failure_label"] = np.where(
-    (df["temperature_smooth"] > 80) | (df["vibration_smooth"] > 4),
-    1,
-    0
-)
+    df["failure"] = (
+        (df["temperature"] > 70) |
+        (df["vibration"] > 3) |
+        (df["machine_stress"] > df["machine_stress"].quantile(0.95))).astype(int)
 
+    # ---------------------------
+    # 5. LOAD (SAVE DATASET)
+    # ---------------------------
 
-# ------------------------------------
-# FINAL FEATURE STORE
-# ------------------------------------
+    df.to_csv(OUTPUT_DATA, index=False)
 
-feature_cols = [
-    "timestamp",
-    "temperature_smooth",
-    "vibration_smooth",
-    "speed",
-    "energy",
-    "temp_roll_mean_30s",
-    "vib_roll_mean_30s",
-    "temp_diff",
-    "speed_pct_change",
-    "tool_wear_ind",
-    "failure_label"
-]
+    print("ETL Completed")
+    print(f"Saved ML dataset → {OUTPUT_DATA}")
 
-df_features = df[feature_cols]
-
-df_features.rename(columns={
-    "temperature_smooth": "temperature",
-    "vibration_smooth": "vibration"
-}, inplace=True)
+    return df
 
 
-# ------------------------------------
-# SAVE DATASET
-# ------------------------------------
-df_features.to_csv("data/cnc_features.csv", index=False)
+if __name__ == "__main__":
 
-import sqlite3
-conn = sqlite3.connect("data/cnc_features.sqlite")
-df_features.to_sql("cnc_features", conn, if_exists="replace", index=False)
-conn.close()
+    df = run_etl()
 
-print("ETL + Feature Engineering Completed!")
-print("Rows:", len(df_features))
-print(df_features.head())
+    if df is not None:
+        print(df.head())

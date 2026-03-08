@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 import time
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 
 BROKER = "broker.hivemq.com"
 PORT = 1883
@@ -49,7 +49,7 @@ def update_sensors():
 
     return {
         "machine_id": MACHINE_ID,
-        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
         "temperature": round(temperature, 2),
         "vibration": round(vibration, 3),
         "speed": speed,
@@ -60,7 +60,8 @@ def update_sensors():
 
 def main():
     client = mqtt.Client()
-    client.connect(BROKER, PORT)
+    client.connect(BROKER, PORT,60)
+    client.loop_start()
 
     print(f"🚀 CNC Data Simulator Started for {MACHINE_ID}")
     print(f"Publishing to topic: {TOPIC}")
